@@ -65,6 +65,12 @@
     <path d="M6.57,1A5.57,5.57,0,1,1,1,6.57,5.57,5.57,0,0,1,6.57,1m0-1a6.57,6.57,0,1,0,6.57,6.57A6.57,6.57,0,0,0,6.57,0Z" />
     <rect x="11.84" y="9.87" width="2" height="5.93" transform="translate(-5.32 12.84) rotate(-45)" />
   </symbol>
+  <symbol class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="home">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+  </symbol>
+  <symbol class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="logout">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+  </svg>
 </svg>
 <header class="page-header">
   <nav>
@@ -179,6 +185,9 @@
 <section class="page-content">
   <section class="search-and-user">
     <form>
+      <!-- <svg aria-hidden="true" onclick="window.location.href='./dashboard.html'">
+        <use xlink:href="#home"></use>
+      </svg> -->
       <input type="search" placeholder="Search Pages...">
       <button type="submit" aria-label="submit form">
         <svg aria-hidden="true">
@@ -189,11 +198,15 @@
     <div class="admin-profile">
       <span class="greeting">Hello teacher</span>
       <div class="notifications">
-        <span class="badge">1</span>
+        <!-- notifs -->
+        <span class="badge">N</span>
         <svg>
           <use xlink:href="#users"></use>
         </svg>
       </div>
+      <span class="greeting" onclick="window.location.href='../../index.html'"><svg>
+        <use xlink:href="#logout"></use>
+      </svg></span>
     </div>
   </section>
   <section class="grid">
