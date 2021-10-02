@@ -2,7 +2,7 @@
 
 A multi theme, completely accessible, ready to use.
 
-🧪 [See it live](https://pixel-fan.github.io/CollegeManagementWebApp)
+🧪 [See it live](https://pixel-fan.github.io/CollegeManagementWebApp/index.html)
 
 - 🦮 Thoroughly accessible
 - 🌗 Light and dark themes
@@ -35,8 +35,6 @@ TODO
 
 ## OSS used
 
-- [PostCSS](https://postcss.org/)
-- [Alpine.js](https://github.com/alpinejs/alpine)
 - [Chart.js (charts)](https://www.chartjs.org/)
 - [UI Faces (avatars)](https://uifaces.co/)
 - [Heroicons (icons)](https://heroicons.dev/)
