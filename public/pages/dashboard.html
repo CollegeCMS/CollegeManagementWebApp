@@ -185,14 +185,15 @@
 <section class="page-content">
   <section class="search-and-user">
     <form>
-      <!-- <svg aria-hidden="true" onclick="window.location.href='./dashboard.html'">
-        <use xlink:href="#home"></use>
-      </svg> -->
+     
       <input type="search" placeholder="Search Pages...">
       <button type="submit" aria-label="submit form">
-        <svg aria-hidden="true">
+       <div id="faltu"> <svg aria-hidden="true">
           <use xlink:href="#search"></use>
         </svg>
+         <svg aria-hidden="true" onclick="window.location.href='./dashboard.html'">
+        <use xlink:href="#home"></use>
+      </svg></div>
       </button>
     </form>
     <div class="admin-profile">
@@ -209,7 +210,9 @@
       </svg></span>
     </div>
   </section>
-  <section class="grid">
+  
+  <!-- <div class="common-div">
+    <section class="grid">
     <article></article>
     <article></article>
     <article></article>
@@ -219,7 +222,11 @@
     <article></article>
     <article></article>
   </section>
-  <div class="div-center gallery">
+  </div> -->
+  
+
+  <div class="common-div">
+    <div class="div-center gallery">
     <div id="carousel">
       <figure><img src="https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__480.jpg" alt=""></figure>
       <figure><img src="https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547__340.jpg" alt=""></figure>
@@ -233,9 +240,11 @@
       <figure><img src="https://cdn.pixabay.com/photo/2017/04/21/17/44/pink-2249403__340.jpg" alt=""></figure>
     </div>
   </div>
-  <footer class="page-footer">
+  </div>
+  
+  <!-- <footer class="page-footer">
     <span>PoPL project</span>
-  </footer>
+  </footer> -->
 </section>
 <!-- partial -->
   <script  src="../js/dashscript.js"></script>
