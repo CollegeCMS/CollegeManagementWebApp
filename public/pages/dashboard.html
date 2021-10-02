@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>PoPL</title>
   <link rel="stylesheet" href="../css/dashstyle.css">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="../css/calendar.css">
 
 </head>
 <body>
@@ -225,7 +227,7 @@
   </div> -->
   
 
-  <div class="common-div">
+  <!-- <div class="common-div">
     <div class="div-center gallery">
     <div id="carousel">
       <figure><img src="https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__480.jpg" alt=""></figure>
@@ -240,14 +242,97 @@
       <figure><img src="https://cdn.pixabay.com/photo/2017/04/21/17/44/pink-2249403__340.jpg" alt=""></figure>
     </div>
   </div>
-  </div>
+  </div> -->
   
+  <div class="common-div">
+    <div class="perDay">
+
+    </div>
+    <div class="calendar calendarIndent">
+      <div class="fileUploader"> <input type="file" id="myFile" multiple size="50" onchange=""> </div>
+
+      <div class="calendar__month">
+        <div class="cal-month__previous"><</div>
+        <div class="cal-month__current"></div>
+        <div class="cal-month__next">></div>
+      </div>
+      <div class="calendar__head">
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+        <div class="cal-head__day"></div>
+      </div>
+      <div class="calendar__body">
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+        <div class="cal-body__week">
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+          <div class="cal-body__day"></div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
   <!-- <footer class="page-footer">
     <span>PoPL project</span>
   </footer> -->
 </section>
 <!-- partial -->
   <script  src="../js/dashscript.js"></script>
+  <script src='https://momentjs.com/downloads/moment-with-locales.js'></script>
+  <script  src="../js/calendar.js"></script>
 
 </body>
 </html>
