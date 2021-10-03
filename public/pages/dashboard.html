@@ -87,7 +87,7 @@
         <use xlink:href="#down"></use>
       </svg>
     </button>
-    <ul class="admin-menu">
+    <ul id="adminMenu" class="admin-menu">
       <li class="menu-heading">
         <h3>Teacher</h3>
       </li>
@@ -107,15 +107,8 @@
           <span>Users</span>
         </a>
       </li>
-      <!-- <li>
-        <a href="#0">
-          <svg>
-            <use xlink:href="#trends"></use>
-          </svg>
-          <span>Trends</span>
-        </a>
-      </li> -->
-      <li>
+
+      <li onclick="switchToCollection()">
         <a href="#0">
           <svg>
             <use xlink:href="#collection"></use>
@@ -123,7 +116,7 @@
           <span>Collection</span>
         </a>
       </li>
-      <li>
+      <li onclick="switchToAttendance()">
         <a href="#0">
           <svg>
             <use xlink:href="#charts"></use>
@@ -213,7 +206,7 @@
     </div>
   </section>
   
-  <!-- <div class="common-div">
+  <!-- <div id="pages" class="common-div">
     <section class="grid">
     <article></article>
     <article></article>
@@ -227,7 +220,7 @@
   </div> -->
   
 
-  <!-- <div class="common-div">
+  <div id="collectionTab" class="common-div">
     <div class="div-center gallery">
     <div id="carousel">
       <figure><img src="https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__480.jpg" alt=""></figure>
@@ -242,16 +235,22 @@
       <figure><img src="https://cdn.pixabay.com/photo/2017/04/21/17/44/pink-2249403__340.jpg" alt=""></figure>
     </div>
   </div>
-  </div> -->
+  </div>
   
-  <div class="common-div">
+  <div id="attendanceTab" class="common-div">
     <div class="perDay">
-
+      <div class="perDayStatus">
+        <div class="totalStatusBox"><div id="totalStudents">180</div> Total</div>
+        <div class="totalStatusBox"><div id="totalPresentStudents">160</div>Present</div>
+        <div class="totalStatusBox"><div id="totalAbsentStudents">20</div>Absent</div>
+      </div>
+      <div class="restOfTheDiv"></div>
     </div>
     <div class="calendar calendarIndent">
-      <div class="fileUploader"> <input type="file" id="myFile" multiple size="50" onchange=""> </div>
-
-      <div class="calendar__month">
+     <div class="fileUploader">
+        <input id="file-upload" type="file"/>
+     </div>
+      <div class="sirfCalender"><div class="calendar__month">
         <div class="cal-month__previous"><</div>
         <div class="cal-month__current"></div>
         <div class="cal-month__next">></div>
@@ -321,7 +320,7 @@
           <div class="cal-body__day"></div>
         </div>
       </div>
-    </div>
+    </div></div>
     
   </div>
 

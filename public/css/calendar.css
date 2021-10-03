@@ -20,6 +20,7 @@
   width: 30px;
   height: 30px;
   text-align: center;
+  color: white;
 }
 .cal-month__previous:hover,
 .cal-month__next:hover {
@@ -41,6 +42,7 @@
 
 .cal-head__day,
 .cal-body__day {
+  color: white;
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -95,24 +97,59 @@
   /* width: 20%; */
   /* margin: 0; */
   margin-top: auto;
+  margin-left: auto;
   background-color: rgb(36, 46, 66);
   height: 80vh;
   position: relative;
   display: flex;
   flex-direction: column;
-	/* justify-content: space-between; */
+  /* justify-content: space-between; */
 }
 
 .fileUploader {
-	height:10%;
+  height: 10%;
   margin: 0;
-	border:#e1e1e1 2px solid;
+  border: #e1e1e1 2px solid;
   color: white;
 }
 
 .perDay {
-  width: 80%;
+  width: 77%;
   height: 100%;
-
-  /* background-color:rgba(0, 0, 0, 0.75) */
+  margin-right: auto;
+  /* background-color: yellow; */
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
+
+.sirfCalender {
+  margin-top: auto;
+}
+
+.fileUploader {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%; */
+  height: 70%;
+}
+
+#file-upload {
+  /* width: 10%; */
+  transform: translateX(50%) translateY(50%);
+  margin: 10px;
+}
+
+input[type='file']::file-selector-button {
+  display: block;
+  border: 2px solid #6c5ce7;
+  padding: 0.5em 0.6em;
+  border-radius: 14px;
+  background-color: #2196f3;
+  color: white;
+  /* transition: 1s; */
+}
+
+
