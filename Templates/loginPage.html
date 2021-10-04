@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IIIT Bhopal</title>
+    <link rel="stylesheet" href="/collegemanagement/iiitbhopal/static/StyleSheets/style.css">
+  </head>
+  <body>
+    <!--_____________ This is login page___________________________ -->
+
+    <div class="card" id="card">
+      <img
+        class="logo"
+        src="/collegemanagement/iiitbhopal/static/projectFiles/IIIT-Header.png"
+        alt=""
+      />
+      <h1>Log in to IIIT Bhopal</h1>
+      <h3>Enter your email and password below</h3>
+      <br />
+        <form action="/auth/o/1/log/college/Login/{{ user }}" method="post" >
+            {% csrf_token %}
+      <div class="single-line">
+        <p class="legend-heading" for="name">Email</p>
+        <input type="text" name="id" id="name" placeholder="Email address" />
+      </div>
+      <div class="single-line">
+        <p class="legend-heading" for="password">Password</p>
+        <input
+          type="text"
+          name="password"
+          id="password"
+          placeholder="Password"
+        />
+      </div>
+      <input
+        type="submit"
+        value="Log In"
+        class="submit"
+      />
+            </form>
+      <p class="sign-up">
+        Don't have an account?
+        <a onclick="flip()">Sign up</a>
+      </p>
+            {% ifnotequal msg "" %}
+        <div>
+                <h4 style="color:red">{{ msg }}</h4>
+        </div>
+            {% endifnotequal %}
+    </div>
+
+    <!--_______________________________________ till here_______________________________________ -->
+
+    <!-- ___________________________This is sign up page___________________________ -->
+
+    <div class="card createAccount" id="card2">
+      <div class="shine"></div>
+      <h1>Create Account</h1>
+      <br />
+      <div class="single-line">
+        <p class="legend-heading" for="name">Name</p>
+        <input type="text" name="name" id="name" />
+      </div>
+      <div class="single-line">
+        <p class="legend-heading" for="emailId">Email ID</p>
+        <input type="text" name="emailId" id="emailId" />
+      </div>
+
+      <div class="single-line">
+        <p class="legend-heading" for="username">Username</p>
+        <input type="text" name="username" id="username" />
+      </div>
+
+      <div class="single-line">
+        <p class="legend-heading" for="password">Password</p>
+        <input type="text" name="password" id="password" />
+      </div>
+
+      <input type="submit" value="Create Account" class="submit" />
+      <p class="sign-up">
+        Already have an account?
+        <a onclick="flipBack()">Sign in</a>
+      </p>
+    </div>
+
+    <!--_______________________________________ till here_______________________________________ -->
+
+    <script src="/collegemanagement/iiitbhopal/static/JavaScript/loginPage.js"></script>
+  </body>
+</html>
