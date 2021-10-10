@@ -11,9 +11,10 @@ def checkCredential(id,password,table):
             return False,-1
         else:
             result=cmd.fetchone()
-            res=bcrypt.checkpw(password,str(result[1]).encode())
+            # res=bcrypt.checkpw(password,str(result[1]).encode())
+            res=password==result['password']
             if(res):
-                return True,result[0]
+                return True,result[f"{table}id"]
             else:
                 return False,-1
     except Exception as e:
@@ -21,16 +22,12 @@ def checkCredential(id,password,table):
         return False,0
 def FetchData(id,table):
     try:
-        if(table=="student"):
-            l=['studentid', 'name', 'address', 'mobile', 'emailid', 'picture', 'previousyearpercentage', 'branch', 'semester', 'numberofbacklog', 'attendencecurrent','clubmember']
-        else:
-            l=['facultyid', 'facultyname', 'facultycontact', 'emailid', 'picture', 'address', 'stream', 'experience', 'pastexperience', 'clubmember']
         q=f"select * from {table} where {table}id={id}"
         db,cmd=createConnection()
         cmd.execute(q)
-        data=cmd.fetchall()
-        data=dict(zip(l,data))
+        data=cmd.fetchone()
         db.close()
+        data.pop('password')
         data=isClubMember(data,id,table)
         return True,data
     except Exception as e:
@@ -64,7 +61,7 @@ def saveAlert(data):
 def givePermission(id):
     try:
         db, cmd = createConnection()
-        q = f"update alerts set status={1},permmision={0} where alertid={id}"
+        q = f"update alerts set status=1,permmision=0 where alertid={id}"
         cmd.execute(q)
         db.close()
         return True

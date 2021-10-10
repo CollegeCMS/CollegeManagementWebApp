@@ -13,6 +13,7 @@ urlpatterns = [
     path('auth/o/1/log/college/Login/<str:user>',Login.Login),
     path('user/dashboard/<str:token>/',Login.UserPortal),
     path('iiitbhopal/gen/1/o/generatealert/<str:token>',Login.generateAlert),
-    path('iiitbhopal/gen/1/o/permission/<str:token>/',Login.givePermission),
+    path('user/o/logout/<str:token>/',Login.LogOut),
 ]
 handler404=render404ErrorPage
+handler500=Login.handleServerError

@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .main{
+            margin: 30px;
+        }
+        .btn{
+            text-decoration: none;
+            color: whitesmoke;
+            background-color: #42a5f5;
+            border: 1px solid black;
+            margin: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .btn:hover
+        {
+            background-color: #90caf9;
+        }
+    </style>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
 </head>
 <body>
-
+<div class="main">
+<a href="/auth/o/log/login/student/" class="btn">Student</a>
+<a href="/auth/o/log/login/faculty/" class="btn">Faculty</a>
+</div>
 </body>
 </html>
