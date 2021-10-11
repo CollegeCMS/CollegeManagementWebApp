@@ -232,9 +232,16 @@
       <div class="restOfTheDiv"></div>
     </div>
     <div class="calendar calendarIndent">
+        <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
      <div class="fileUploader">
-        <input id="file-upload" type="file"/>
+        <input id="file-upload" type="file" name="attendencefile"/>
      </div>
+        <input  type="text" name="branch" placeholder="branch"/>
+        <input  type="text" name="semester" placeholder="semester"/>
+        <input  type="text" name="facultyid" placeholder="facultyid"/>
+            <input  type="submit" value="upload"/>
+        </form>
       <div class="sirfCalender"><div class="calendar__month">
         <div class="cal-month__previous"><</div>
         <div class="cal-month__current"></div>

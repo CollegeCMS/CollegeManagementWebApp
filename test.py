@@ -37,7 +37,8 @@ def manageTimeStamp(name,data):
     data = list(data)
     data = reduce(Computation1, data)
     return data
-data=pd.read_csv('test.csv',sep="\t")
+data=pd.read_csv('F:/Django Major Project/College Management/CollegeManagement/publicFiles/userUploadedFiles/attendenceFiles/d23c6c63-69f6-43ec-8f2e-7411521ef063.csv',sep="\t")
+print(data)
 data['Timestamp']=[parse(data['Timestamp'][i]).timetz() for i in range(0,len(data["Timestamp"]))]
 names=list(set(data["Full Name"]))
 data=pd.DataFrame({"Full Name":names,"Time":[manageTimeStamp(name,data) for name in names]})

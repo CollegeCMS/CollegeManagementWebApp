@@ -14,6 +14,7 @@ urlpatterns = [
     path('user/dashboard/<str:token>/',Login.UserPortal),
     path('iiitbhopal/gen/1/o/generatealert/<str:token>',Login.generateAlert),
     path('user/o/logout/<str:token>/',Login.LogOut),
+    path('uploadfile/<str:token>',Login.uploadAttendenceFileUrl),
 ]
 handler404=render404ErrorPage
 handler500=Login.handleServerError

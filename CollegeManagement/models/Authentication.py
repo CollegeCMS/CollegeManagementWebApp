@@ -1,5 +1,6 @@
 from .connection import createConnection
 import bcrypt
+from datetime import datetime
 def checkCredential(id,password,table):
     try:
         db,cmd=createConnection()
@@ -68,3 +69,37 @@ def givePermission(id):
     except Exception as e:
         print(e)
         return False
+def uploadAttendenceFile(fileid,branch,semester,facultyid,present):
+    try:
+        if("/" in branch):
+            a=tuple(branch.split('/'))
+        else:
+            a=f"('{branch}')"
+        q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',(select subjectid from subjects where branch='{branch}' and semester={semester} and facultyid={facultyid}),{str(datetime.now().toordinal())},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
+        print(q)
+        db,cmd=createConnection()
+        cmd.execute(q)
+        db.commit()
+        cmd.close()
+        db.close()
+        return True
+    except Exception as e:
+        print(e)
+        return False
+def fetchAllStudent(branch,semester,names):
+    try:
+        if ("/" in branch):
+            a = tuple(branch.split('/'))
+        else:
+            a = f"('{branch}')"
+        q=f"select studentid from student where semester={semester} and branch in {a} and name in {names}"
+        print(q)
+        db, cmd = createConnection()
+        cmd.execute(q)
+        data=cmd.fetchall()
+        cmd.close()
+        db.close()
+        return True,data
+    except Exception as e:
+        print(e)
+        return False,[]

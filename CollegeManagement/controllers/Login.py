@@ -2,8 +2,15 @@ from django.shortcuts import render,redirect
 from ..models import Authentication
 from django.http import JsonResponse
 import datetime
+from ..settings import BASE_DIR
+from ..OtherFunction import ManageProject
 from ..SecretKeys.codes import codes
 import jwt
+import pandas as pd
+from functools import reduce
+import threading
+from dateutil.parser import parse
+from ..models.connection import createDataConnection
 data={}
 def preLoginPageRender(request):
     try:
@@ -179,8 +186,118 @@ def manageCSV(file):
     f=open(file,"r")
     data=f.read()[2:].replace("\x00","")
     f.close()
+    data=data.strip()
     f=open(file,"w")
     f.write(data)
     f.close()
-def uploadAttendenceFile(request,token):
-    pass
+    p=convertToFrame(file)
+    return p
+def uploadAttenceFile(file,id):
+    try:
+        f=open(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{id}",'wb')
+        for chunk in file.chunks():
+            f.write(chunk)
+        f.close()
+        p=manageCSV(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{id}")
+        if(p[0]):
+            return True,p
+        else:
+            return [False]
+    except Exception as e:
+        print(e)
+        return False,0
+def uploadAttendenceFileUrl(request,token):
+    try:
+        ip = request.META['REMOTE_ADDR']
+        res = checkAuth(token, ip)
+        if (res[0]):
+            data = request.POST
+            semester=data['semester']
+            branch=data['branch']
+            facultyid=data['facultyid']
+            file = request.FILES['attendencefile']
+            fileid=ManageProject.fileUniqueId(file=file)
+            res=uploadAttenceFile(file,fileid)
+            if(res[0]):
+                res=res[1]
+                manageAttendence=threading.Thread(target=analysis,args=(res[2],branch,semester,fileid))
+                manageAttendence.start()
+                print(res)
+                res=Authentication.uploadAttendenceFile(fileid,branch,semester,facultyid,res[1])
+                if(res):
+                    return JsonResponse({"status": True})
+                else:
+                    return JsonResponse({"status": False})
+            else:
+                return JsonResponse({"status": False})
+        else:
+            if (res[1] == 0):
+                return redirect("/login")
+            elif (res[1] == -1):
+                return JsonResponse({"msg": "Invalid Authentication"}, status=401)
+            else:
+                return JsonResponse({"status": False})
+    except Exception as e:
+        print(e)
+        return JsonResponse({"status": False})
+def Computation(a,b):
+    sec1=a.second
+    sec2=b.second
+    min1=a.minute
+    min2=b.minute
+    hour1=a.hour
+    hour2=b.hour
+    if(sec1>sec2):
+        min2-=1
+        sec=60+sec2-sec1
+    else:
+        sec=sec2-sec1
+    if (min1 > min2):
+        hour2 -= 1
+        min = 60 + min2 - min1
+    else:
+        min = min2 - min1
+    hour=hour2-hour1
+    return a.replace(hour,min,sec)
+def Computation1(a,b):
+    sec=abs(a.second+b.second)
+    min=abs(a.minute+b.minute+sec//60)
+    sec=sec%60
+    hour=abs(a.hour+b.hour+min//60)
+    min=min%60
+    return a.replace(hour,min,sec)
+def manageTimeStamp(name,data):
+    left = (data[(data["Full Name"] == name) & (data["User Action"] == "Left")]["Timestamp"])
+    join = (data[(data["Full Name"] == name) & (data["User Action"] == "Joined")]["Timestamp"])
+    if (len(left) != len(join)):
+        left = list(left)
+        left.append(parse(f"{12}:{00}:{00}").timetz())
+    data = map(Computation, join, left)
+    data = list(data)
+    data = reduce(Computation1, data)
+    return data
+def convertToFrame(file):
+    try:
+        data = pd.read_csv(file, sep="\t")
+        return True,len(set(data['Full Name'])),data
+    except Exception as e:
+        print(e)
+        return [False]
+def analysis(data,semester,branch,file):
+    try:
+        data['Timestamp'] = [parse(data['Timestamp'][i]).timetz() for i in range(0, len(data["Timestamp"]))]
+        names = list(set(data["Full Name"]))
+        res=Authentication.fetchAllStudent(semester,branch,tuple(names))
+        data = pd.DataFrame({"studentid":[item['studentid'] for item in res[1]],"studentname": names, "time": [manageTimeStamp(name, data) for name in names]})
+        data['date']=str(datetime.datetime.now().toordinal())
+        data.to_csv(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{file}",index=False)
+        engine=createDataConnection()
+        data.to_sql('studentattendence', con=engine, if_exists="append", index=False)
+    except Exception as e:
+        print(e)
+def getAttendence(request):
+    try:
+        pass
+    except Exception as e:
+        print(e)
+        return JsonResponse({"msg":"Server Error...."})
