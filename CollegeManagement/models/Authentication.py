@@ -5,6 +5,7 @@ def checkCredential(id,password,table):
     try:
         db,cmd=createConnection()
         q=f"select {table}id,password from {table} where emailid='{id}'"
+        print(q)
         cmd.execute(q)
         count=cmd.rowcount
         db.close()
@@ -24,6 +25,7 @@ def checkCredential(id,password,table):
 def FetchData(id,table):
     try:
         q=f"select * from {table} where {table}id={id}"
+        print(q)
         db,cmd=createConnection()
         cmd.execute(q)
         data=cmd.fetchone()
@@ -39,11 +41,13 @@ def isClubMember(data:dict,id,status):
         if(bool(data['clubmember'])):
             l=['clubid', 'clubname', 'hoc', 'hocid', 'clubcode', 'clublogo', 'numberofmember', 'goal', 'status','clubmemberid']
             db, cmd = createConnection()
-            q = f"select p.*,s.* from club s,collegeclub p where s.memberid={id} and s.memberstatus={status} and s.clubcode=p.clubid"
+            q = f"select p.*,s.* from club s,collegeclub p where s.memberid={id} and s.memberstatus='{status}' and s.clubcode=p.clubid"
+            print(q)
             cmd.execute(q)
-            dataClub = cmd.fetchall()
-            dataClub = dict(zip(l, dataClub))
-            data.update(dataClub)
+            dataClub = cmd.fetchone()
+            if(dataClub):
+            # dataClub = dict(zip(l, dataClub))
+                data.update(dataClub)
             db.close()
         return data
     except Exception as e:
@@ -69,13 +73,28 @@ def givePermission(id):
     except Exception as e:
         print(e)
         return False
-def uploadAttendenceFile(fileid,branch,semester,facultyid,present):
+def getBranchandsemester(subjectid):
     try:
+        q=f"select branch,semester from subjects where subjectid={subjectid}"
+        db,cmd=createConnection()
+        cmd.execute(q)
+        data=cmd.fetchone()
+        cmd.close()
+        db.close()
+        return data
+    except Exception as e:
+        print(e)
+        return {}
+def uploadAttendenceFile(fileid,subjectid,present):
+    try:
+        data=getBranchandsemester(subjectid)
+        branch=data['branch']
+        semester=data['semester']
         if("/" in branch):
             a=tuple(branch.split('/'))
         else:
             a=f"('{branch}')"
-        q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',(select subjectid from subjects where branch='{branch}' and semester={semester} and facultyid={facultyid}),{str(datetime.now().toordinal())},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
+        q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',{subjectid},{str(datetime.now().toordinal())},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
         print(q)
         db,cmd=createConnection()
         cmd.execute(q)
@@ -86,13 +105,26 @@ def uploadAttendenceFile(fileid,branch,semester,facultyid,present):
     except Exception as e:
         print(e)
         return False
-def fetchAllStudent(branch,semester,names):
+def getsubjectid(id):
     try:
+        db,cmd=createConnection()
+        cmd.execute(f"select subjectid,name from subjects where facultyid={id}")
+        data=cmd.fetchall()
+        cmd.close()
+        db.close()
+        return True,data
+    except Exception as e:
+        return [False]
+def fetchAllStudent(subjectid,names):
+    try:
+        data = getBranchandsemester(subjectid)
+        branch = data['branch']
+        semester = data['semester']
         if ("/" in branch):
             a = tuple(branch.split('/'))
         else:
             a = f"('{branch}')"
-        q=f"select studentid from student where semester={semester} and branch in {a} and name in {names}"
+        q=f"select studentid,name from student where semester={semester} and branch in {a} and name in {names}"
         print(q)
         db, cmd = createConnection()
         cmd.execute(q)
@@ -103,3 +135,16 @@ def fetchAllStudent(branch,semester,names):
     except Exception as e:
         print(e)
         return False,[]
+def getAttendence(id,date):
+    try:
+        q=f"select * from attendencefile where subjectid={id} and date={date}"
+        db,cmd=createConnection()
+        cmd.execute(q)
+        data=cmd.fetchone()
+        if(data):
+            return True,data
+        else:
+            return [False]
+    except Exception as e:
+        print(e)
+        return [False]

@@ -79,3 +79,27 @@ function switchToAttendance() {
   document.getElementById('attendanceTab').style.display = 'flex'
   currentActive = document.getElementById('attendanceTab')
 }
+async function getAttendence(){
+  date=document.getElementById('date')
+  if(new Date(date.value)<new Date()){
+    let token=JSON.parse(document.getElementById('mydata').textContent);
+    let data=await fetch(`/getattendence/${token}/?date=${date.value}`)
+    data=await data.json()
+    data=data.data
+    if(data.total!==undefined) {
+      document.getElementById('totalStudents').innerHTML = data.total
+      document.getElementById('totalPresentStudents').innerHTML = data.presentstudent
+      document.getElementById('totalAbsentStudents').innerHTML = data.absentstudent
+      document.getElementById('file_link').innerHTML=`<a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/${data.filename}" download="true">Download</a>`
+    }
+  else{
+      document.getElementById('totalStudents').innerHTML = ""
+      document.getElementById('totalPresentStudents').innerHTML = ""
+      document.getElementById('totalAbsentStudents').innerHTML = ""
+    }
+  }
+else{
+  alert("Invalid date")
+    date.value=""
+  }
+}

@@ -212,18 +212,15 @@ def uploadAttendenceFileUrl(request,token):
         res = checkAuth(token, ip)
         if (res[0]):
             data = request.POST
-            semester=data['semester']
-            branch=data['branch']
-            facultyid=data['facultyid']
+            subjectid=data['subjectid']
             file = request.FILES['attendencefile']
             fileid=ManageProject.fileUniqueId(file=file)
             res=uploadAttenceFile(file,fileid)
             if(res[0]):
                 res=res[1]
-                manageAttendence=threading.Thread(target=analysis,args=(res[2],branch,semester,fileid))
+                manageAttendence=threading.Thread(target=analysis,args=(res[2],subjectid,fileid))
                 manageAttendence.start()
-                print(res)
-                res=Authentication.uploadAttendenceFile(fileid,branch,semester,facultyid,res[1])
+                res=Authentication.uploadAttendenceFile(fileid,subjectid,res[1])
                 if(res):
                     return JsonResponse({"status": True})
                 else:
@@ -279,25 +276,58 @@ def manageTimeStamp(name,data):
 def convertToFrame(file):
     try:
         data = pd.read_csv(file, sep="\t")
-        return True,len(set(data['Full Name'])),data
+        return True,len(set(data['Full Name']))-1,data
     except Exception as e:
         print(e)
         return [False]
-def analysis(data,semester,branch,file):
+def analysis(data,subjectid,file):
     try:
         data['Timestamp'] = [parse(data['Timestamp'][i]).timetz() for i in range(0, len(data["Timestamp"]))]
         names = list(set(data["Full Name"]))
-        res=Authentication.fetchAllStudent(semester,branch,tuple(names))
-        data = pd.DataFrame({"studentid":[item['studentid'] for item in res[1]],"studentname": names, "time": [manageTimeStamp(name, data) for name in names]})
-        data['date']=str(datetime.datetime.now().toordinal())
-        data.to_csv(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{file}",index=False)
+        res=Authentication.fetchAllStudent(subjectid,tuple(names))
+        data1= pd.DataFrame({"studentid":[item['studentid'] for item in res[1]],"studentname": [item['name'] for item in res[1]]})
+        data1['time']=[manageTimeStamp(name, data) for name in data1['studentname']]
+        data1['date']=datetime.date.today()
+        data1['subjectid']=subjectid
+        data1.to_csv(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{file}",index=False)
+        data1['date']=str(datetime.datetime.now().toordinal())
         engine=createDataConnection()
-        data.to_sql('studentattendence', con=engine, if_exists="append", index=False)
+        data1.to_sql('studentattendence', con=engine, if_exists="append", index=False)
     except Exception as e:
         print(e)
-def getAttendence(request):
+def getAttendence(request,token):
     try:
-        pass
+        ip = request.META['REMOTE_ADDR']
+        res = checkAuth(token, ip)
+        if (res[0]):
+            date=request.GET['date']
+            id=2
+            date=datetime.date.fromisoformat(date).toordinal()
+            print(date)
+            data=Authentication.getAttendence(id,date)
+            if(data[0]):
+                return JsonResponse({"data":data[1]})
+            else:
+                return JsonResponse({"data":{}})
+        else:
+            if (res[1] == 0):
+                return redirect("/login")
+            elif (res[1] == -1):
+                return JsonResponse({"msg": "Invalid Authentication"}, status=401)
+            else:
+                return JsonResponse({"status": False})
     except Exception as e:
         print(e)
-        return JsonResponse({"msg":"Server Error...."})
+        return JsonResponse({"data":{}})
+def getSubjectid(request):
+    try:
+
+        id=request.GET['facultyid']
+        data=Authentication.getsubjectid(id)
+        if(data[0]):
+            return JsonResponse({'data':data[1]})
+        else:
+            return JsonResponse({"data":[]})
+    except Exception as e:
+        print(e)
+        return JsonResponse({"data": []})

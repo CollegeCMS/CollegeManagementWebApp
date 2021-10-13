@@ -90,37 +90,45 @@
       <li class="menu-heading">
         <h3>Teacher</h3>
       </li>
+        <li>
+        <a href="#0">
+          <svg>
+            <use xlink:href="#users"></use>
+          </svg>
+          <span>User</span>
+        </a>
+      </li>
       <li>
         <a href="#0">
           <svg>
             <use xlink:href="#pages"></use>
           </svg>
-          <span>Pages</span>
-        </a>
-      </li>
-      <li>
-        <a href="#0">
-          <svg>
-            <use xlink:href="#users"></use>
-          </svg>
-          <span>Users</span>
+          <span>Upload Attendence File</span>
         </a>
       </li>
 
-      <li onclick="switchToCollection()">
-        <a href="#0">
-          <svg>
-            <use xlink:href="#collection"></use>
-          </svg>
-          <span>Collection</span>
-        </a>
-      </li>
+{#      <li onclick="switchToCollection()">#}
+{#        <a href="#0">#}
+{#          <svg>#}
+{#            <use xlink:href="#collection"></use>#}
+{#          </svg>#}
+{#          <span>Attendence</span>#}
+{#        </a>#}
+{#      </li>#}
       <li onclick="switchToAttendance()">
         <a href="#0">
           <svg>
             <use xlink:href="#charts"></use>
           </svg>
           <span>Attendance</span>
+        </a>
+      </li>
+        <li>
+        <a href="#0">
+          <svg>
+            <use xlink:href="#comments"></use>
+          </svg>
+          <span>Add Request</span>
         </a>
       </li>
       <li>
@@ -131,33 +139,15 @@
           <span>Requests</span>
         </a>
       </li>
-      <li>
-        <a href="/user/o/logout/{{token}}">
-          <svg>
-            <use xlink:href="#appearance"></use>
-          </svg>
-          <span>Logout</span>
-        </a>
-      </li>
-      <li class="menu-heading">
-        <h3>Settings</h3>
-      </li>
-      <li>
+        <li>
         <a href="#0">
           <svg>
-            <use xlink:href="#settings"></use>
+            <use xlink:href="#comments"></use>
           </svg>
-          <span>Settings</span>
+          <span>Manage Blog</span>
         </a>
       </li>
-      <li>
-        <a href="#0">
-          <svg>
-            <use xlink:href="#options"></use>
-          </svg>
-          <span>Options</span>
-        </a>
-      </li>
+
       <li>
         <div class="switch">
           <input type="checkbox" id="mode" checked>
@@ -221,27 +211,29 @@
     </div>
   </div>
   </div>
-
+{{ token|json_script:"mydata" }}
   <div id="attendanceTab" class="common-div">
     <div class="perDay">
+        <div>
+            <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="text" name="subjectid" placeholder="subjectid">
+                <input type="file" name="attendencefile">
+                <input type="submit" value="upload">
+            </form>
+        </div>
       <div class="perDayStatus">
-        <div class="totalStatusBox"><div id="totalStudents">180</div> Total</div>
-        <div class="totalStatusBox"><div id="totalPresentStudents">160</div>Present</div>
-        <div class="totalStatusBox"><div id="totalAbsentStudents">20</div>Absent</div>
+      <input type="date" id="date" onchange="getAttendence()">
+        <div class="totalStatusBox"><div id="totalStudents"></div> Total</div>
+        <div class="totalStatusBox"><div id="totalPresentStudents"></div>Present</div>
+        <div class="totalStatusBox"><div id="totalAbsentStudents"></div>Absent</div>
+          <div id="file_link"></div>
       </div>
       <div class="restOfTheDiv"></div>
     </div>
-    <div class="calendar calendarIndent">
-        <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
-{% csrf_token %}
-     <div class="fileUploader">
-        <input id="file-upload" type="file" name="attendencefile"/>
-     </div>
-        <input  type="text" name="branch" placeholder="branch"/>
-        <input  type="text" name="semester" placeholder="semester"/>
-        <input  type="text" name="facultyid" placeholder="facultyid"/>
-            <input  type="submit" value="upload"/>
-        </form>
+
+      <div class="calendar calendarIndent">
+
       <div class="sirfCalender"><div class="calendar__month">
         <div class="cal-month__previous"><</div>
         <div class="cal-month__current"></div>
