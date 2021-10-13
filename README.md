@@ -1,4 +1,4 @@
-# College Management Web app
+# College Management Web project
 
 A multi theme, completely accessible, ready to use.
 
