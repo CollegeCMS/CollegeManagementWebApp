@@ -57,7 +57,7 @@ class Calendar {
       this.monthString = this.month.clone().format('MMMM YYYY')
       
         
-      // console.log(this.selected._i)
+      console.log(this.selected._i)
       this.draw()
     }
     
