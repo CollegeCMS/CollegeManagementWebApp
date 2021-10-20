@@ -16,6 +16,8 @@ urlpatterns = [
     path('user/o/logout/<str:token>/',Login.LogOut),
     path('uploadfile/<str:token>',Login.uploadAttendenceFileUrl),
     path('getattendence/<str:token>/',Login.getAttendence),
+    path('getsubjectid/<str:token>/',Login.getSubjectid),
+    path('uploadattendence/gen/o/u/<str:token>/',Login.uploadAttendencePage),
 ]
 handler404=render404ErrorPage
 handler500=Login.handleServerError

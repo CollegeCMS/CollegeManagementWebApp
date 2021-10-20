@@ -214,13 +214,15 @@ def uploadAttendenceFileUrl(request,token):
             data = request.POST
             subjectid=data['subjectid']
             file = request.FILES['attendencefile']
+            date=data['dateupload']
+            date=datetime.date.fromisoformat(date).toordinal()
             fileid=ManageProject.fileUniqueId(file=file)
             res=uploadAttenceFile(file,fileid)
             if(res[0]):
                 res=res[1]
                 manageAttendence=threading.Thread(target=analysis,args=(res[2],subjectid,fileid))
                 manageAttendence.start()
-                res=Authentication.uploadAttendenceFile(fileid,subjectid,res[1])
+                res=Authentication.uploadAttendenceFile(fileid,subjectid,res[1],date)
                 if(res):
                     return JsonResponse({"status": True})
                 else:
@@ -301,7 +303,7 @@ def getAttendence(request,token):
         res = checkAuth(token, ip)
         if (res[0]):
             date=request.GET['date']
-            id=2
+            id=request.GET['subjectid']
             date=datetime.date.fromisoformat(date).toordinal()
             print(date)
             data=Authentication.getAttendence(id,date)
@@ -319,15 +321,41 @@ def getAttendence(request,token):
     except Exception as e:
         print(e)
         return JsonResponse({"data":{}})
-def getSubjectid(request):
+def getSubjectid(request,token):
     try:
-
-        id=request.GET['facultyid']
-        data=Authentication.getsubjectid(id)
-        if(data[0]):
-            return JsonResponse({'data':data[1]})
+        ip = request.META['REMOTE_ADDR']
+        res = checkAuth(token, ip)
+        if (res[0]):
+            id=res[1]
+            data=Authentication.getsubjectid(id)
+            if(data[0]):
+                return JsonResponse({'data':data[1]})
+            else:
+                return JsonResponse({"data":[]})
         else:
-            return JsonResponse({"data":[]})
+            if (res[1] == 0):
+                return redirect("/login")
+            elif (res[1] == -1):
+                return JsonResponse({"msg": "Invalid Authentication"}, status=401)
+            else:
+                return JsonResponse({"status": False})
     except Exception as e:
         print(e)
-        return JsonResponse({"data": []})
+        return JsonResponse({"data":[]})
+def uploadAttendencePage(request,token):
+    try:
+        ip = request.META['REMOTE_ADDR']
+        res = checkAuth(token, ip)
+        if (res[0]):
+            return render(request,"uploadAttendence.html",{"token":token})
+        else:
+            if (res[1] == 0):
+                return redirect("/login")
+            elif (res[1] == -1):
+                return JsonResponse({"msg": "Invalid Authentication"}, status=401)
+            else:
+                return JsonResponse({"status": False})
+    except Exception as e:
+        print(e)
+        return JsonResponse({"data":{}})
+        

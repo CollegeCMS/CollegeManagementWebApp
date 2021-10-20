@@ -79,11 +79,10 @@ function switchToAttendance() {
   document.getElementById('attendanceTab').style.display = 'flex'
   currentActive = document.getElementById('attendanceTab')
 }
-async function getAttendence(){
-  date=document.getElementById('date')
-  if(new Date(date.value)<new Date()){
+async function getAttendence(date){
+  if(new Date(date)<=new Date()){
     let token=JSON.parse(document.getElementById('mydata').textContent);
-    let data=await fetch(`/getattendence/${token}/?date=${date.value}`)
+    let data=await fetch(`/getattendence/${token}/?date=${date}&subjectid=${document.getElementById('subjectid').value}`)
     data=await data.json()
     data=data.data
     if(data.total!==undefined) {
@@ -100,6 +99,19 @@ async function getAttendence(){
   }
 else{
   alert("Invalid date")
-    date.value=""
   }
 }
+async function getSubjectid(){
+    let token=JSON.parse(document.getElementById('mydata').textContent);
+    let data=await fetch(`/getsubjectid/${token}/`)
+    data=await data.json()
+    data=data.data
+	console.log(data)
+let a=""    
+for(let i=0;i<data.length;i++){
+	item=data[i]
+	a+=`<option value=${item.subjectid}>${item.name}/${item.subjectid}</option>`
+}
+document.getElementById('subjectid').innerHTML=a;
+}
+getSubjectid()

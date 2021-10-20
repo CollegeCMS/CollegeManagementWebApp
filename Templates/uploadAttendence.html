@@ -1,0 +1,29 @@
+<div>
+            <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+			
+                <select id="subjectid" name="subjectid"></select>
+<input type="date" name="dateupload" required>
+                <input type="file" name="attendencefile">
+                <input type="submit" value="upload">
+            </form>
+        </div>
+{{ token|json_script:"mydata" }}
+<script>
+async function getSubjectid(){
+    let token=JSON.parse(document.getElementById('mydata').textContent);
+    let data=await fetch(`/getsubjectid/${token}/`)
+    data=await data.json()
+    data=data.data
+	console.log(data)
+let a=""    
+for(let i=0;i<data.length;i++){
+	item=data[i]
+	a+=`<option value=${item.subjectid}>${item.name}/${item.subjectid}</option>`
+}
+document.getElementById('subjectid').innerHTML=a;
+}
+getSubjectid()
+
+
+</script>

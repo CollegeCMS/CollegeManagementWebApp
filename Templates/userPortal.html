@@ -99,7 +99,7 @@
         </a>
       </li>
       <li>
-        <a href="#0">
+        <a href="/uploadattendence/gen/o/u/{{token}}/" target="__blank__"">
           <svg>
             <use xlink:href="#pages"></use>
           </svg>
@@ -214,16 +214,8 @@
 {{ token|json_script:"mydata" }}
   <div id="attendanceTab" class="common-div">
     <div class="perDay">
-        <div>
-            <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="text" name="subjectid" placeholder="subjectid">
-                <input type="file" name="attendencefile">
-                <input type="submit" value="upload">
-            </form>
-        </div>
+        
       <div class="perDayStatus">
-      <input type="date" id="date" onchange="getAttendence()">
         <div class="totalStatusBox"><div id="totalStudents"></div> Total</div>
         <div class="totalStatusBox"><div id="totalPresentStudents"></div>Present</div>
         <div class="totalStatusBox"><div id="totalAbsentStudents"></div>Absent</div>
@@ -233,7 +225,7 @@
     </div>
 
       <div class="calendar calendarIndent">
-
+		<select id="subjectid"></select>
       <div class="sirfCalender"><div class="calendar__month">
         <div class="cal-month__previous"><</div>
         <div class="cal-month__current"></div>

@@ -58,6 +58,12 @@ class Calendar {
       
         
       console.log(this.selected._i)
+	if(this.selected._i===undefined){
+setTimeout(()=>{
+getAttendence(this.selected._i===undefined?new Date().toLocaleDateString('en-CA'):this.selected._i)
+},1000)	}
+	else
+	  getAttendence(this.selected._i===undefined?new Date().toLocaleDateString('en-CA'):this.selected._i)
       this.draw()
     }
     
@@ -133,3 +139,7 @@ class Calendar {
   
   const cal = new Calendar()
   cal.init()
+document.getElementById('subjectid').addEventListener('change',(e)=>{
+
+cal.update();
+})

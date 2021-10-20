@@ -85,7 +85,7 @@ def getBranchandsemester(subjectid):
     except Exception as e:
         print(e)
         return {}
-def uploadAttendenceFile(fileid,subjectid,present):
+def uploadAttendenceFile(fileid,subjectid,present,date):
     try:
         data=getBranchandsemester(subjectid)
         branch=data['branch']
@@ -94,7 +94,7 @@ def uploadAttendenceFile(fileid,subjectid,present):
             a=tuple(branch.split('/'))
         else:
             a=f"('{branch}')"
-        q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',{subjectid},{str(datetime.now().toordinal())},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
+        q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',{subjectid},{str(date)},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
         print(q)
         db,cmd=createConnection()
         cmd.execute(q)
