@@ -154,7 +154,6 @@ def checkAuth(token,ip=""):
         user_data=jwt.decode(token,codes['secret_key'],jwt.get_unverified_header(token)['alg'])
         date = datetime.datetime.fromisoformat(user_data['loginDate'])
         date=date.toordinal()-datetime.datetime.now().toordinal()
-        print(date)
         if (date > 1):
             data.pop(user_data['ip'])
             return False, 0

@@ -5,7 +5,6 @@ def checkCredential(id,password,table):
     try:
         db,cmd=createConnection()
         q=f"select {table}id,password from {table} where emailid='{id}'"
-        print(q)
         cmd.execute(q)
         count=cmd.rowcount
         db.close()
@@ -25,7 +24,6 @@ def checkCredential(id,password,table):
 def FetchData(id,table):
     try:
         q=f"select * from {table} where {table}id={id}"
-        print(q)
         db,cmd=createConnection()
         cmd.execute(q)
         data=cmd.fetchone()
@@ -42,7 +40,6 @@ def isClubMember(data:dict,id,status):
             l=['clubid', 'clubname', 'hoc', 'hocid', 'clubcode', 'clublogo', 'numberofmember', 'goal', 'status','clubmemberid']
             db, cmd = createConnection()
             q = f"select p.*,s.* from club s,collegeclub p where s.memberid={id} and s.memberstatus='{status}' and s.clubcode=p.clubid"
-            print(q)
             cmd.execute(q)
             dataClub = cmd.fetchone()
             if(dataClub):
@@ -95,7 +92,6 @@ def uploadAttendenceFile(fileid,subjectid,present,date):
         else:
             a=f"('{branch}')"
         q=f"insert into attendencefile (filename, subjectid, date, presentstudent, absentstudent, total) values('{fileid}',{subjectid},{str(date)},{present},(select count(*) from student where semester={semester} and branch in {a})-{present},(select count(*) from student where semester={semester} and branch in {a}))"
-        print(q)
         db,cmd=createConnection()
         cmd.execute(q)
         db.commit()
@@ -126,7 +122,6 @@ def fetchAllStudent(subjectid):
             a = f"('{branch}')"
         # q=f"select studentid,name from student where semester={semester} and branch in {a} and name in {names}"
         q=f"select studentid,name from student where semester={semester} and branch in {a}"
-        print(q)
         db, cmd = createConnection()
         cmd.execute(q)
         data=cmd.fetchall()
