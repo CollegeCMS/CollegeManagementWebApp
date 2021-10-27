@@ -1,3 +1,5 @@
+import os.path
+
 from django.shortcuts import render,redirect
 from ..models import Authentication
 from django.http import JsonResponse
@@ -5,12 +7,12 @@ import datetime
 from ..settings import BASE_DIR
 from ..OtherFunction import ManageProject
 from ..SecretKeys.codes import codes
-import jwt
 import pandas as pd
 from functools import reduce
 import threading
 from dateutil.parser import parse
 from ..models.connection import createDataConnection
+import jwt
 data={}
 def preLoginPageRender(request):
     try:
@@ -32,7 +34,6 @@ def preLoginPageRender(request):
         return render(request,"error500.html")
 def loginPageRender(request,user="",msg=""):
     try:
-        print(user,request.META['REQUEST_METHOD'])
         if(user=="faculty" or user=="student"):
             return render(request,"loginPage.html",{"user":user,"msg":msg})
         else:
@@ -63,6 +64,24 @@ def Login(request,user):
     except Exception as e:
         print("Error controller"+str(e))
         return JsonResponse({"msg":"Server Error"},status=500)
+def LogOut(request,token):
+    try:
+        ip=request.META['REMOTE_ADDR']
+        res=checkAuth(token,ip)
+        if (res[0]):
+            data.pop(ip)
+            return redirect('/login')
+        else:
+            if (res[1] == 0):
+                return redirect(f'/user/dashboard/{token}')
+            elif (res[1] == -1):
+                return render(request, "error401.html")
+            else:
+                return JsonResponse({"msg": "Server Error"}, status=500)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"msg": "Server Error"}, status=500)
+
 def UserPortal(request,token):
     try:
         res=checkAuth(token,request.META['REMOTE_ADDR'])
@@ -83,23 +102,6 @@ def UserPortal(request,token):
         print(e)
         return JsonResponse({"msg":"Server Error"},status=500)
 
-def LogOut(request,token):
-    try:
-        ip=request.META['REMOTE_ADDR']
-        res=checkAuth(token,ip)
-        if (res[0]):
-            data.pop(ip)
-            return redirect('/login')
-        else:
-            if (res[1] == 0):
-                return redirect(f'/user/dashboard/{token}')
-            elif (res[1] == -1):
-                return render(request, "error401.html")
-            else:
-                return JsonResponse({"msg": "Server Error"}, status=500)
-    except Exception as e:
-        print(e)
-        return JsonResponse({"msg": "Server Error"}, status=500)
 
 def generateAlert(request,token):
     try:
@@ -220,7 +222,7 @@ def uploadAttendenceFileUrl(request,token):
             res=uploadAttenceFile(file,fileid)
             if(res[0]):
                 res=res[1]
-                manageAttendence=threading.Thread(target=analysis,args=(res[2],subjectid,fileid))
+                manageAttendence=threading.Thread(target=analysis,args=(res[2],subjectid,fileid,date))
                 manageAttendence.start()
                 res=Authentication.uploadAttendenceFile(fileid,subjectid,res[1],date)
                 if(res):
@@ -282,19 +284,19 @@ def convertToFrame(file):
     except Exception as e:
         print(e)
         return [False]
-def analysis(data,subjectid,file):
+def analysis(data,subjectid,file,date):
     try:
         data['Timestamp'] = [parse(data['Timestamp'][i]).timetz() for i in range(0, len(data["Timestamp"]))]
-        names = list(set(data["Full Name"]))
-        res=Authentication.fetchAllStudent(subjectid,tuple(names))
-        data1= pd.DataFrame({"studentid":[item['studentid'] for item in res[1]],"studentname": [item['name'] for item in res[1]]})
-        data1['time']=[manageTimeStamp(name, data) for name in data1['studentname']]
-        data1['date']=datetime.date.today()
+        names=set(data["Full Name"])
+        res=Authentication.fetchAllStudent(subjectid)
+        data1= pd.DataFrame({"studentid":[item['studentid'] for item in res[1]],"name":[item['name'] for item in res[1]]})
+        data1[['time',f"{datetime.date.fromordinal(date)}"]]=[[manageTimeStamp(name, data),"P"] if(name in names) else [0,"A"] for name in data1['name']]
         data1['subjectid']=subjectid
         data1.to_csv(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/{file}",index=False)
-        data1['date']=str(datetime.datetime.now().toordinal())
+        data1['date']=str(date)
         engine=createDataConnection()
-        data1.to_sql('studentattendence', con=engine, if_exists="append", index=False)
+        data1=data1.rename({f"{datetime.date.fromordinal(date)}":"attendence"},axis="columns")
+        data1[['studentid',"subjectid","date","attendence"]].to_sql('studentattendence', con=engine, if_exists="append", index=False)
     except Exception as e:
         print(e)
 def getAttendence(request,token):
@@ -305,10 +307,12 @@ def getAttendence(request,token):
             date=request.GET['date']
             id=request.GET['subjectid']
             date=datetime.date.fromisoformat(date).toordinal()
-            print(date)
             data=Authentication.getAttendence(id,date)
             if(data[0]):
-                return JsonResponse({"data":data[1]})
+                data[2] = list(zip(*data[2]))
+                data[2] = dict(zip(["Student Id", "Name", "Present", "Absent"], data[2]))
+                generateAnalysisFile(data[2],data[1]['filename'])
+                return JsonResponse({"data":data[1],"analysis":data[2]})
             else:
                 return JsonResponse({"data":{}})
         else:
@@ -321,6 +325,14 @@ def getAttendence(request,token):
     except Exception as e:
         print(e)
         return JsonResponse({"data":{}})
+def generateAnalysisFile(res,filename):
+    try:
+        res=pd.DataFrame(res)
+        res['Total Days']=res['Present']+res['Absent']
+        res['Percentage']=res['Present']*100/res["Total Days"]
+        res.to_csv(f"{BASE_DIR}/publicFiles/userUploadedFiles/attendenceFiles/analysis{filename}",index=False)
+    except Exception as e:
+        print(e)
 def getSubjectid(request,token):
     try:
         ip = request.META['REMOTE_ADDR']

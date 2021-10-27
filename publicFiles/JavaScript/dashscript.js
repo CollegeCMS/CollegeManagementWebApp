@@ -89,7 +89,7 @@ async function getAttendence(date){
       document.getElementById('totalStudents').innerHTML = data.total
       document.getElementById('totalPresentStudents').innerHTML = data.presentstudent
       document.getElementById('totalAbsentStudents').innerHTML = data.absentstudent
-      document.getElementById('file_link').innerHTML=`<a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/${data.filename}" download="true">Download</a>`
+      document.getElementById('file_link').innerHTML=`<a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/${data.filename}" download="true">Download Per Day</a><br><a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/analysis${data.filename}" download="true">Download Analysis File</a>`
     }
   else{
       document.getElementById('totalStudents').innerHTML = ""

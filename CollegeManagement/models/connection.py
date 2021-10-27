@@ -5,6 +5,10 @@ def createConnection(database="collegemanagement"):
     db=sql.connect(host="localhost",port=3306,password=codes['DB_PASSWORD'],db=database,user="root")
     cmd=db.cursor(sql.cursors.DictCursor)
     return db,cmd
+def createConnectionList(database="collegemanagement"):
+    db=sql.connect(host="localhost",port=3306,password=codes['DB_PASSWORD'],db=database,user="root")
+    cmd=db.cursor()
+    return db,cmd
 def createDataConnection(database="collegemanagement"):
     engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                            .format(user="root",

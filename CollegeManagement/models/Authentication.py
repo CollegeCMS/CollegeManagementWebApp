@@ -1,4 +1,4 @@
-from .connection import createConnection
+from .connection import createConnection,createConnectionList
 import bcrypt
 from datetime import datetime
 def checkCredential(id,password,table):
@@ -115,7 +115,7 @@ def getsubjectid(id):
         return True,data
     except Exception as e:
         return [False]
-def fetchAllStudent(subjectid,names):
+def fetchAllStudent(subjectid):
     try:
         data = getBranchandsemester(subjectid)
         branch = data['branch']
@@ -124,7 +124,8 @@ def fetchAllStudent(subjectid,names):
             a = tuple(branch.split('/'))
         else:
             a = f"('{branch}')"
-        q=f"select studentid,name from student where semester={semester} and branch in {a} and name in {names}"
+        # q=f"select studentid,name from student where semester={semester} and branch in {a} and name in {names}"
+        q=f"select studentid,name from student where semester={semester} and branch in {a}"
         print(q)
         db, cmd = createConnection()
         cmd.execute(q)
@@ -138,11 +139,16 @@ def fetchAllStudent(subjectid,names):
 def getAttendence(id,date):
     try:
         q=f"select * from attendencefile where subjectid={id} and date={date}"
+        q1=f"select s.studentid,s.name,(select count(*) from studentattendence where subjectid={id} and studentid=s.studentid and attendence='P' and date<={date}) present,(select count(*) from studentattendence where subjectid={id} and studentid=s.studentid and attendence='A' and date<={date}) absent from student s"
         db,cmd=createConnection()
         cmd.execute(q)
         data=cmd.fetchone()
         if(data):
-            return True,data
+            db.close()
+            db,cmd=createConnectionList()
+            cmd.execute(q1)
+            data1=cmd.fetchall()
+            return [True,data,data1]
         else:
             return [False]
     except Exception as e:
