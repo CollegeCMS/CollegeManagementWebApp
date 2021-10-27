@@ -1,6 +1,6 @@
 /* RESET RULES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
 
 :root {
   --page-header-bgColor: #242e42;
@@ -54,7 +54,7 @@ input {
   -webkit-appearance: none;
 }
 
-[type='checkbox'] {
+[type="checkbox"] {
   position: absolute;
   left: -9999px;
 }
@@ -73,7 +73,7 @@ svg {
 }
 
 body {
-  font: 16px/1.5 'Lato', sans-serif;
+  font: 16px/1.5 "Lato", sans-serif;
 }
 
 /* HEADER STYLES
@@ -231,7 +231,7 @@ body {
   position: relative;
 }
 
-.search-and-user [type='search'] {
+.search-and-user [type="search"] {
   width: 100%;
   height: 50px;
   font-size: 1.5rem;
@@ -394,7 +394,7 @@ body {
     background: transparent;
   }
 
-  .search-and-user [type='search'] {
+  .search-and-user [type="search"] {
     font-size: 1rem;
     height: 35px;
   }
@@ -478,7 +478,7 @@ body {
 
 .switch span:first-child::before,
 .switch span:first-child::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: 50%;
 }
@@ -503,19 +503,19 @@ body {
   box-shadow: 0 0 4px 2px #ffdb1a;
 }
 
-.switch [type='checkbox']:checked + label span:first-child {
+.switch [type="checkbox"]:checked + label span:first-child {
   background: var(--switch-bgDarkModeColor);
 }
 
-.switch [type='checkbox']:focus + label span:first-child {
+.switch [type="checkbox"]:focus + label span:first-child {
   box-shadow: 0 3px 5px rgba(255, 255, 255, 0.25);
 }
 
-.switch [type='checkbox']:checked + label span:first-child::before {
+.switch [type="checkbox"]:checked + label span:first-child::before {
   transform: translateX(24px);
 }
 
-.switch [type='checkbox']:checked + label span:first-child::after {
+.switch [type="checkbox"]:checked + label span:first-child::after {
   left: 12px;
   width: 15px;
   height: 15px;
@@ -550,7 +550,7 @@ body {
   fill: var(--black);
 }
 
-.light-mode .switch [type='checkbox']:focus + label span:first-child {
+.light-mode .switch [type="checkbox"]:focus + label span:first-child {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
 }
 
@@ -727,4 +727,47 @@ body {
 
 #collectionTab {
   display: none;
+}
+
+.grid-column {
+  width: 90%;
+  /* background-color: red; */
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 2fr 1fr;
+  margin: auto;
+}
+
+.grid-column div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid grey;
+  font: bold;
+}
+
+/* .grid-column:first-child {
+  border: none;
+  color: yellow;
+} */
+
+.grid-column:hover {
+  background-color: rgba(128, 128, 128, 0.363);
+  font-weight: bolder;
+}
+
+#file_link {
+  margin-top: 10px;
+  display: flex;
+}
+
+#file_link a {
+  background-color: #242e42;
+  border-radius: 5px;
+  color: white;
+  padding: 15px;
+  margin-left: 60px;
+}
+
+#file_link a:hover {
+  background-color: #2196f3;
 }
