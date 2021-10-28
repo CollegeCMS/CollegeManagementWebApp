@@ -1,5 +1,5 @@
 <div>
-            <form action="/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
+            <form action="/attendance/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 			
                 <select id="subjectid" name="subjectid"></select>

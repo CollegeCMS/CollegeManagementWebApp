@@ -82,7 +82,7 @@ function switchToAttendance() {
 async function getAttendence(date){
   if(new Date(date)<=new Date()){
     let token=JSON.parse(document.getElementById('mydata').textContent);
-    let data=await fetch(`/getattendence/${token}/?date=${date}&subjectid=${document.getElementById('subjectid').value}`)
+    let data=await fetch(`/attendance/getattendence/${token}/?date=${date}&subjectid=${document.getElementById('subjectid').value}`)
     data=await data.json()
     data=data.data
     if(data.total!==undefined) {
@@ -95,6 +95,7 @@ async function getAttendence(date){
       document.getElementById('totalStudents').innerHTML = ""
       document.getElementById('totalPresentStudents').innerHTML = ""
       document.getElementById('totalAbsentStudents').innerHTML = ""
+      document.getElementById('file_link').innerHTML=""
     }
   }
 else{
