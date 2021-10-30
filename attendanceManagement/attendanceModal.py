@@ -1,4 +1,4 @@
-from CollegeManagement.models.connection import createConnection,createConnectionList
+from CollegeManagement.connection import createConnection,createConnectionList
 def getBranchandsemester(subjectid):
     try:
         q=f"select branch,semester from subjects where subjectid={subjectid}"

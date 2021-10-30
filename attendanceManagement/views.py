@@ -6,7 +6,7 @@ from CollegeManagement.settings import BASE_DIR
 import threading
 from . import attendanceModal
 import pandas as pd
-from CollegeManagement.models.connection import createDataConnection
+from CollegeManagement.connection import createDataConnection
 from functools import reduce
 from dateutil.parser import parse
 import datetime

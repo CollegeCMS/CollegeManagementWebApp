@@ -1,4 +1,4 @@
-from CollegeManagement.models.connection import createConnection
+from CollegeManagement.connection import createConnection
 def saveAlert(data):
     try:
         db, cmd = createConnection()

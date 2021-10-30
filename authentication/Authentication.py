@@ -1,5 +1,6 @@
-from CollegeManagement.models.connection import createConnection,createConnectionList
-import bcrypt
+from CollegeManagement.connection import createConnection
+
+
 def checkCredential(id,password,table):
     try:
         db,cmd=createConnection()

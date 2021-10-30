@@ -1,4 +1,4 @@
-from CollegeManagement.models.connection import createConnection
+from CollegeManagement.connection import createConnection
 def getsubjectid(id):
     try:
         db,cmd=createConnection()
