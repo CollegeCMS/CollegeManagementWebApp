@@ -1,3 +1,5 @@
+{% extends "./userPortal.html" %}
+{% block content  %}
 <div>
             <form action="/attendance/uploadfile/{{ token }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -27,3 +29,4 @@ getSubjectid()
 
 
 </script>
+{% endblock %}

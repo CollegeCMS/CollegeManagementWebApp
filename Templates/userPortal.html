@@ -91,7 +91,7 @@
         <h3>Teacher</h3>
       </li>
         <li>
-        <a href="#0">
+        <a href="/user/dashboard/{{token}}/">
           <svg>
             <use xlink:href="#users"></use>
           </svg>
@@ -99,7 +99,7 @@
         </a>
       </li>
       <li>
-        <a href="/attendance/uploadattendence/gen/o/u/{{token}}/" target="__blank__"">
+        <a href="/attendance/uploadattendence/gen/o/u/{{token}}/">
           <svg>
             <use xlink:href="#pages"></use>
           </svg>
@@ -211,10 +211,11 @@
     </div>
   </div>
   </div>
-{{ token|json_script:"mydata" }}
-  <div id="attendanceTab" class="common-div">
-    <div class="perDay">
-        
+    {% block content %}
+        {{ token|json_script:"mydata" }}
+    <div id="attendanceTab" class="common-div">
+      <div class="perDay">
+
       <div class="perDayStatus">
         <div class="totalStatusBox"><div id="totalStudents"></div> Total</div>
         <div class="totalStatusBox"><div id="totalPresentStudents"></div>Present</div>
@@ -300,6 +301,7 @@
 
   </div>
 
+    {% endblock %}
   <!-- <footer class="page-footer">
     <span>PoPL project</span>
   </footer> -->
