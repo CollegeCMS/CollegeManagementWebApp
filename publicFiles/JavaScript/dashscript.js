@@ -79,27 +79,85 @@ function switchToAttendance() {
   document.getElementById('attendanceTab').style.display = 'flex'
   currentActive = document.getElementById('attendanceTab')
 }
-async function getAttendence(date){
-  if(new Date(date)<=new Date()){
-    let token=JSON.parse(document.getElementById('mydata').textContent);
-    let data=await fetch(`/attendance/getattendence/${token}/?date=${date}&subjectid=${document.getElementById('subjectid').value}`)
-    data=await data.json()
-    data=data.data
-    if(data.total!==undefined) {
-      document.getElementById('totalStudents').innerHTML = data.total
-      document.getElementById('totalPresentStudents').innerHTML = data.presentstudent
-      document.getElementById('totalAbsentStudents').innerHTML = data.absentstudent
-      document.getElementById('file_link').innerHTML=`<a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/${data.filename}" download="true">Download Per Day</a><br><a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/analysis${data.filename}" download="true">Download Analysis File</a>`
+let kuch;
+async function getAttendence(date) {
+  if (new Date(date) <= new Date()) {
+    let token = JSON.parse(document.getElementById("mydata").textContent);
+    let data = await fetch(
+      `/attendance/getattendence/${token}/?date=${date}&subjectid=${
+        document.getElementById("subjectid").value
+      }`
+    );
+    data = await data.json();
+    console.log("hi", data.analysis);
+    kuch = data.analysis;
+
+
+    data = data.data;
+
+    if (data.total !== undefined) {
+
+
+    let gridParent = document.getElementById("restOfTheDiv");
+
+    for (let i = 0; i < kuch.Name.length; i++) {
+      let newDiv = document.createElement("div");
+      newDiv.className = "grid-column";
+
+      let forId = document.createElement("div");
+      forId.textContent = kuch["Student Id"][i];
+      newDiv.appendChild(forId);
+
+      let forName = document.createElement("div");
+      forName.textContent = kuch["Name"][i];
+      newDiv.appendChild(forName);
+
+      let forPresent = document.createElement("div");
+      forPresent.textContent = kuch["Present"][i];
+      newDiv.appendChild(forPresent);
+
+      let forAbsent = document.createElement("div");
+      forAbsent.textContent = kuch["Absent"][i];
+      newDiv.appendChild(forAbsent);
+
+      let forPercentage = document.createElement("div");
+      let percentage = `${
+        (kuch["Present"][i] * 100) /
+        (kuch["Present"][i] + kuch["Absent"][i])
+      }`;
+      forPercentage.textContent = parseInt(percentage) + "%";
+      newDiv.appendChild(forPercentage);
+      if (parseFloat(percentage) >= 75) {
+        newDiv.style.color = "green";
+      } else {
+        newDiv.style.color = "red";
+      }
+      // newDiv.addEventListener('hover', () => {
+      //   newDiv.style.
+      // })
+      gridParent.append(newDiv);
     }
-  else{
-      document.getElementById('totalStudents').innerHTML = ""
-      document.getElementById('totalPresentStudents').innerHTML = ""
-      document.getElementById('totalAbsentStudents').innerHTML = ""
-      document.getElementById('file_link').innerHTML=""
+      document.getElementById("totalStudents").innerHTML = data.total;
+      document.getElementById("totalPresentStudents").innerHTML =
+        data.presentstudent;
+      document.getElementById("totalAbsentStudents").innerHTML =
+        data.absentstudent;
+      document.getElementById(
+        "file_link"
+      ).innerHTML = `<a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/${data.filename}" download="true">Download Per Day</a><a href="/collegemanagement/iiitbhopal/static/userUploadedFiles/attendenceFiles/analysis${data.filename}" download="true">Download Analysis File</a>`;
+    } else {
+      document.getElementById("totalStudents").innerHTML = "";
+      document.getElementById("file_link").innerHTML = "";
+      document.getElementById("totalPresentStudents").innerHTML = "";
+      document.getElementById("totalAbsentStudents").innerHTML = "";
+       let gridParent = document.getElementById("restOfTheDiv");
+
+    while (gridParent.childElementCount - 1 != 0) {
+      gridParent.removeChild(gridParent.lastChild);
     }
-  }
-else{
-  alert("Invalid date")
+    }
+  } else {
+    alert("Invalid date");
   }
 }
 async function getSubjectid(){

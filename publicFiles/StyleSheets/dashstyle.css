@@ -728,3 +728,45 @@ body {
 #collectionTab {
   display: none;
 }
+.grid-column {
+  width: 90%;
+  /* background-color: red; */
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 2fr 1fr;
+  margin: auto;
+}
+
+.grid-column div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid grey;
+  font-weight:bold;
+}
+
+/* .grid-column:first-child {
+  border: none;
+  color: yellow;
+} */
+
+.grid-column:hover {
+  background-color: rgba(128, 128, 128, 0.363);
+  font-weight: bolder;
+}
+
+#file_link {
+  margin-top: 10px;
+  display: flex;
+}
+
+#file_link a {
+  background-color: #242e42;
+  border-radius: 5px;
+  color: white;
+  padding: 15px;
+  margin-left: 60px;
+}
+
+#file_link a:hover {
+  background-color: #2196f3;
+}
